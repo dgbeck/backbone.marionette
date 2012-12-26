@@ -14,6 +14,7 @@ Marionette.View = Backbone.View.extend({
     Marionette.bindEntityEvents(this, this.model, Marionette.getOption(this, "modelEvents"));
     Marionette.bindEntityEvents(this, this.collection, Marionette.getOption(this, "collectionEvents"));
 
+    Marionette.MonitorDOMRefresh(this);
     this.bindTo(this, "show", this.onShowCalled, this);
   },
 
@@ -92,16 +93,20 @@ Marionette.View = Backbone.View.extend({
   close: function(){
     if (this.isClosed) { return; }
 
+    // allow the close to be stopped by returning `false`
+    // from the `onBeforeClose` method
     var shouldClose = this.triggerMethod("before:close");
     if (shouldClose === false){
       return;
     }
 
-    this.remove();
-
-    this.triggerMethod("close");
+    // mark as closed before doing the actual close, to
+    // prevent infinite loops within "close" event handlers
+    // that are trying to close other views
     this.isClosed = true;
 
+    this.remove();
+    this.triggerMethod("close");
     this.unbindAll();
   },
 

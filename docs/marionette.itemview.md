@@ -10,7 +10,6 @@ will be treated as a single item.
 * [Events and Callback Methods](#events-and-callback-methods)
   * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
   * ["render" / onRender event](#render--onrender-event)
-  * ["dom:refresh" / onDomRefresh event](#render--onrenderupdate-event)
   * ["before:close" / onBeforeClose event](#beforeclose--onbeforeclose-event)
   * ["close" / onClose event](#close--onclose-event)
 * [ItemView serializeData](#itemview-serializedata)
@@ -32,6 +31,30 @@ MyView = Backbone.Marionette.ItemView.extend({
 
 new MyView().render();
 ```
+
+.. or a function taking a single argument - the object returned by [ItemView.serializeData](#itemview-serializedata):
+
+```js
+my_template_html = '<div><%= args.name %></div>'
+MyView = Backbone.Marionette.ItemView.extend({
+  template : function(serialized_model) {
+    var name = serialized_model.name;
+    return _.template(my_template_html, {
+        name : name,
+        some_custom_attribute : some_custom_key
+    }, {variable: 'args'});
+  }
+});
+
+new MyView().render();
+```
+
+Note that using a template function allows passing custom arguments into the _.template function,
+including a third "settings" argument, as used in the example above.
+
+According to the [Underscore docs](http://underscorejs.org/#template), using the "variable" setting
+"can significantly improve the speed at which a template is able to render." Using this setting
+also requires you to read data arguments from an object, as demonstrated in the example above.
 
 ## Events and Callback Methods
 
@@ -70,31 +93,6 @@ Backbone.Marionette.ItemView.extend({
   }
 });
 ```
-
-### "dom:refresh" / onDomRefresh event
-
-Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
-re-rendered.
-
-This event / callback is useful for 
-[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as 
-[jQueryUI](http://jqueryui.com/)
- or 
-[KendoUI](http://kendoui.com)
-.
-
-```js
-Backbone.Marionette.ItemView.extend({
-  onDomRefresh: function(){
-    // manipulate the `el` here. it's already
-    // been rendered, and is full of the view's
-    // HTML, ready to go.
-  }
-});
-```
-
-For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
-widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
 ### "before:close" / onBeforeClose event
 

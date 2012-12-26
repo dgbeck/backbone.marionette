@@ -1,3 +1,15 @@
+### v1.0.0-rc2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc1...v1.0.0-rc2)
+
+* CollectionView / CompositeView
+  * **BREAKING: ** Changed the `item:added` event to `before:item:added` and `after:item:added`
+  * Fixed the `onShow` callbacks, so they can be used in the `initialize` method
+
+* AMD build
+  * Fixed the AMD build by adding Backbone.BabySitter to the AMD dependency list
+
+* All Views
+  * All views (include Marionette.View) now have a "dom:refresh" and `onDomRefresh` event / method triggered
+
 ### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...v1.0.0-rc1)
 
 * Fixed IE < 9 support w/ calls to `.apply` when `arguments` was null or undefined

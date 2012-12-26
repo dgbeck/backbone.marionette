@@ -79,15 +79,9 @@ Enderjs users, please let us know of how you solve any compatibility issues.
 You can download the latest builds directly from the "lib" folder above.  
 For more information about the files in this folder, or to obtain an archive
 containing all Marionette dependencies (including Underscore, Backbone, etc),
-please see [the downloads section on the website](http://marionettejs.com#downloads).
+please see [the downloads section on the website](http://marionettejs.com#download).
 
-#### [http://marionettejs.com#downloads](http://marionettejs.com#downloads)
-
-### Marionette.Async Add-on
-
-Marionette.Async has officially been removed from the core Marionette
-repository. See the [Marionette.Async repository](https://github.com/marionettejs/backbone.marionette.async)
-for downloads, documentation, and more information.
+#### [http://marionettejs.com#download](http://marionettejs.com#download)
 
 ### Available Packages
 
@@ -103,7 +97,7 @@ and are not part of the core Backbone.Marionette code.
 The primary documentation is split up in to multiple files, due to the size
 of the over-all documentation. You can find these files in the 
 [/docs](https://github.com/marionettejs/backbone.marionette/tree/master/docs) folder, or use the links below to get straight to the
-documentation for each peice of Marionette.
+documentation for each piece of Marionette.
 
 ### Marionette's Pieces
 
