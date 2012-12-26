@@ -4,7 +4,7 @@
 // This method is used to bind a backbone "entity" (collection/model) 
 // to methods on a target object. 
 //
-// The first paremter, `target`, must have a `bindTo` method from the
+// The first paremter, `target`, must have a `listenTo` method from the
 // EventBinder object.
 //
 // The second parameter is the entity (Backbone.Model or Backbone.Collection)
@@ -14,6 +14,7 @@
 // configuration. Multiple handlers can be separated by a space. A
 // function can be supplied instead of a string handler name. 
 Marionette.bindEntityEvents = (function(){
+  "use strict";
 
   // Bind the event to handlers specified as a string of
   // handler names on the target object
@@ -27,19 +28,25 @@ Marionette.bindEntityEvents = (function(){
         throw new Error("Method '"+ methodName +"' was configured as an event handler, but does not exist.");
       }
 
-      target.bindTo(entity, evt, method, target);
+      target.listenTo(entity, evt, method, target);
     });
   }
 
   // Bind the event to a supplied callback function
   function bindToFunction(target, entity, evt, method){
-      target.bindTo(entity, evt, method, target);
+      target.listenTo(entity, evt, method, target);
   }
 
   // Export the bindEntityEvents method
   return function(target, entity, bindings){
     if (!entity || !bindings) { return; }
 
+    // allow the bindings to be a function
+    if (_.isFunction(bindings)){
+      bindings = bindings.call(target);
+    }
+
+    // iterate the bindings and bind them
     _.each(bindings, function(methods, evt){
 
       // allow for a function as the handler, 

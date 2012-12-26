@@ -14,6 +14,7 @@ behaviors that are shared across all views.
 * [Binding To View Events](#binding-to-view-events)
 * [View close](#view-close)
 * [View onBeforeClose](#view-onbeforeclose)
+* [View "dom:refresh" / onDomRefresh event](#view-domrefresh--ondomrefresh-event)
 * [View.triggers](#viewtriggers)
 * [View.modelEvents and View.collectionEvents](#viewmodelevents-and-viewcollectionevents)
 * [View.serializeData](#viewserializedata)
@@ -27,14 +28,14 @@ behaviors that are shared across all views.
 ## Binding To View Events
 
 Marionette.View extends `Marionette.BindTo`. It is recommended that you use
-the `bindTo` method to bind model, collection, or other events from Backbone
+the `listenTo` method to bind model, collection, or other events from Backbone
 and Marionette objects.
 
 ```js
 MyView = Backbone.Marionette.ItemView.extend({
   initialize: function(){
-    this.bindTo(this.model, "change:foo", this.modelChanged);
-    this.bindTo(this.collection, "add", this.modelAdded);
+    this.listenTo(this.model, "change:foo", this.modelChanged);
+    this.listenTo(this.collection, "add", this.modelAdded);
   },
 
   modelChanged: function(model, value){
@@ -47,7 +48,7 @@ MyView = Backbone.Marionette.ItemView.extend({
 
 The context (`this`) will automatically be set to the view. You can
 optionally set the context by passing in the context object as the
-4th parameter of `bindTo`.
+4th parameter of `listenTo`.
 
 ## View close
 
@@ -55,7 +56,7 @@ View implements a `close` method, which is called by the region
 managers automatically. As part of the implementation, the following
 are performed:
 
-* unbind all `bindTo` events
+* unbind all `listenTo` events
 * unbind all custom view events
 * unbind all DOM events
 * remove `this.el` from the DOM
@@ -96,6 +97,28 @@ var v = new MyView();
 
 v.close(); // view will remain open
 ```
+
+### View "dom:refresh" / onDomRefresh event
+
+Triggered after the view has been rendered, has been shown in the DOM via a Marionette.Region, and has been
+re-rendered.
+
+This event / callback is useful for 
+[DOM-dependent UI plugins](http://lostechies.com/derickbailey/2012/02/20/using-jquery-plugins-and-ui-controls-with-backbone/) such as 
+[jQueryUI](http://jqueryui.com/) or [KendoUI](http://kendoui.com).
+
+```js
+Backbone.Marionette.ItemView.extend({
+  onDomRefresh: function(){
+    // manipulate the `el` here. it's already
+    // been rendered, and is full of the view's
+    // HTML, ready to go.
+  }
+});
+```
+
+For more information about integration Marionette w/ KendoUI (also applicable to jQueryUI and other UI
+widget suites), see [this blog post on KendoUI + Backbone](http://www.kendoui.com/blogs/teamblog/posts/12-11-26/backbone_and_kendo_ui_a_beautiful_combination.aspx).
 
 ## View.triggers
 
@@ -156,11 +179,11 @@ method on the view.
 Backbone.Marionette.CompositeView.extend({
 
   modelEvents: {
-    "change:name": "nameChanged" // equivalent to view.bindTo(view.model, "change:name", view.nameChanged, view)
+    "change:name": "nameChanged" // equivalent to view.listenTo(view.model, "change:name", view.nameChanged, view)
   },
 
   collectionEvents: {
-    "add": "itemAdded" // equivalent to view.bindTo(view.collection, "add", collection.itemAdded, view)
+    "add": "itemAdded" // equivalent to view.listenTo(view.collection, "add", collection.itemAdded, view)
   },
 
   // ... event handler methods
@@ -170,7 +193,7 @@ Backbone.Marionette.CompositeView.extend({
 })
 ```
 
-These will use the memory safe `bindTo`, and will set the context
+These will use the memory safe `listenTo`, and will set the context
 (the value of `this`) in the handler to be the view. Events are
 bound at the time of instantiation instanciation, and an exception will be thrown
 if the handlers on the view do not exist.
@@ -207,6 +230,23 @@ Backbone.Marionette.CompositeView.extend({
     "change:name": function(){
       // handle the name changed event here
     }
+  }
+
+});
+```
+
+This works for both `modelEvents` and `collectionEvents`.
+
+### Event Configuration As Function
+
+A function can be used to declare the event configuration, as long as
+that function returns a hash that fits the above configuration options.
+
+```js
+Backbone.Marionette.CompositeView.extend({
+
+  modelEvents: function(){
+    return { "change:name": "someFunc" };
   }
 
 });

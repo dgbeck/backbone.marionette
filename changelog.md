@@ -1,3 +1,48 @@
+### v1.0.0-rc3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc2...v1.0.0-rc3)
+
+* Backbone v0.9.9
+  * **BREAKING:** Backbone v0.9.2 is no longer supported
+  * Backbone v0.9.9 is now supported
+
+* Backbone.EventBinder / Marionette.EventBinder
+  * **BREAKING:** Marionette.EventBinder / Backbone.EventBinder have been removed entirely.
+  * Backbone.Events supercedes the older objects
+  * Backbone.Wreqr.EventAggregator also supercedes Marionette.EventBinder
+
+* EventBinder -> EventAggregator
+  * **BREAKING:** Backbone.Werqr.EventAggregator largely replaces Backbone.EventBinder
+  * **BREAKING:** `bindTo` has been replaced with `listenTo`
+  * **BREAKING:** `unbindAll` has been replaced with `stopLitening`
+  * **BREAKING:** `unbindFrom` has been removed and will not be replaced
+
+* Marionette.addEventBinder
+  * **BREAKING:** This function will mix in Backbone.Events to the target object if it does not exist
+  * **BREAKING:** This function will alter the `listenTo` method of the target to accept a `context` parameter as the 4th parameter of the method
+  
+* All Views, Controller, etc
+  * **BREAKING:** Backbone.EventBinder is no longer mixed in
+  * **BREAKING:** See 'EventBinder -> EventAggregator' changes regarding method names to use for binding / unbinding events
+
+* All Views
+  * **BREAKING:** The `initialEvents` method has been removed. Use the `initialize` method, the `collectionEvents` or `modelEvents` configuration instead.
+  * Allow `modelEvents` and `collectionEvents` to be a function that returns a hash
+  * Allow `ui` configuration to be a function that returns a hash
+
+* Modules
+  * Fixed a bug where a module would not be started without an explicit definition for that module (#388 & #400)
+
+### v1.0.0-rc2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-rc1...v1.0.0-rc2)
+
+* CollectionView / CompositeView
+  * **BREAKING: ** Changed the `item:added` event to `before:item:added` and `after:item:added`
+  * Fixed the `onShow` callbacks, so they can be used in the `initialize` method
+
+* AMD build
+  * Fixed the AMD build by adding Backbone.BabySitter to the AMD dependency list
+
+* All Views
+  * All views (include Marionette.View) now have a "dom:refresh" and `onDomRefresh` event / method triggered
+
 ### v1.0.0-rc1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta6...v1.0.0-rc1)
 
 * Fixed IE < 9 support w/ calls to `.apply` when `arguments` was null or undefined

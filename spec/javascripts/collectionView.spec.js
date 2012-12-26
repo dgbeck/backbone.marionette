@@ -20,7 +20,8 @@ describe("collection view", function(){
 
     onRender: function(){},
 
-    onItemAdded: function(view){}
+    onBeforeItemAdded: function(view){},
+    onAfterItemAdded: function(view){}
   });
 
   // Collection View Specs
@@ -58,7 +59,8 @@ describe("collection view", function(){
       collectionView.on("itemview:render", itemViewRender);
 
       spyOn(collectionView, "onRender").andCallThrough();
-      spyOn(collectionView, "onItemAdded").andCallThrough();
+      spyOn(collectionView, "onBeforeItemAdded").andCallThrough();
+      spyOn(collectionView, "onAfterItemAdded").andCallThrough();
       spyOn(collectionView, "onBeforeRender").andCallThrough();
       spyOn(collectionView, "trigger").andCallThrough();
       spyOn(collectionView, "appendHtml").andCallThrough();
@@ -102,15 +104,26 @@ describe("collection view", function(){
       expect(collectionView.trigger).toHaveBeenCalledWith("render", collectionView);
     });
 
-    it("should call `onItemAdded` for each itemView instance", function(){
+    it("should call `onBeforeItemAdded` for each itemView instance", function(){
       var v1 = collectionView.children.findByIndex(0);
       var v2 = collectionView.children.findByIndex(1);
-      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v1);
-      expect(collectionView.onItemAdded).toHaveBeenCalledWith(v2);
+      expect(collectionView.onBeforeItemAdded).toHaveBeenCalledWith(v1);
+      expect(collectionView.onBeforeItemAdded).toHaveBeenCalledWith(v2);
     });
 
-    it("should call `onItemAdded` for all itemView instances", function(){
-      expect(collectionView.onItemAdded.callCount).toBe(2);
+    it("should call `onAfterItemAdded` for each itemView instance", function(){
+      var v1 = collectionView.children.findByIndex(0);
+      var v2 = collectionView.children.findByIndex(1);
+      expect(collectionView.onAfterItemAdded).toHaveBeenCalledWith(v1);
+      expect(collectionView.onAfterItemAdded).toHaveBeenCalledWith(v2);
+    });
+
+    it("should call `onBeforeItemAdded` for all itemView instances", function(){
+      expect(collectionView.onBeforeItemAdded.callCount).toBe(2);
+    });
+
+    it("should call `onAfterItemAdded` for all itemView instances", function(){
+      expect(collectionView.onAfterItemAdded.callCount).toBe(2);
     });
 
     it("should trigger itemview:render for each item in the collection", function(){
@@ -401,12 +414,12 @@ describe("collection view", function(){
       childModel = collection.at(0);
       childView = collectionView.children.findByIndex(0);
 
-      collectionView.bindTo(collection, "foo", collectionView.someCallback);
-      collectionView.bindTo(collectionView, "item:foo", collectionView.someItemViewCallback);
+      collectionView.listenTo(collection, "foo", collectionView.someCallback);
+      collectionView.listenTo(collectionView, "item:foo", collectionView.someItemViewCallback);
 
       spyOn(childView, "close").andCallThrough();
       spyOn(collectionView, "removeItemView").andCallThrough();
-      spyOn(collectionView, "unbindAll").andCallThrough();
+      spyOn(collectionView, "stopListening").andCallThrough();
       spyOn(collectionView, "remove").andCallThrough();
       spyOn(collectionView, "someCallback").andCallThrough();
       spyOn(collectionView, "someItemViewCallback").andCallThrough();
@@ -429,8 +442,8 @@ describe("collection view", function(){
       expect(childView.close).toHaveBeenCalled();
     });
 
-    it("should unbind all the bindTo events", function(){
-      expect(collectionView.unbindAll).toHaveBeenCalled();
+    it("should unbind all the listenTo events", function(){
+      expect(collectionView.stopListening).toHaveBeenCalled();
     });
 
     it("should unbind all collection events for the view", function(){
@@ -445,12 +458,8 @@ describe("collection view", function(){
       expect(_.size(collectionView.children)).toBe(0);
     });
 
-    it("should not retain any bindings to its children", function(){
-      expect(_.size(collectionView.eventBinder._eventBindings)).toBe(0);
-    });
-
     it("should unbind any listener to custom view events", function(){
-      expect(collectionView.unbindAll).toHaveBeenCalled();
+      expect(collectionView.stopListening).toHaveBeenCalled();
     });
 
     it("should remove the view's EL from the DOM", function(){
@@ -609,11 +618,12 @@ describe("collection view", function(){
       expect(eventNames).toEqual([
           'before:render',
           'collection:before:render',
+          'before:item:added',
           'itemview:before:render',
           'itemview:item:before:render',
           'itemview:render',
           'itemview:item:rendered',
-          'item:added',
+          'after:item:added',
           'render',
           'collection:rendered'
       ]);
@@ -691,8 +701,11 @@ describe("collection view", function(){
 
     var ItemView = Backbone.Marionette.ItemView.extend({
       onShow: function(){ viewOnShowContext = this; },
+      onDomRefresh: function(){ },
       onRender: function(){},
-      render: function(){}
+      render: function() {
+          this.trigger("render");
+      }
     });
 
     var ColView = Backbone.Marionette.CollectionView.extend({
@@ -702,6 +715,7 @@ describe("collection view", function(){
 
     beforeEach(function(){
       spyOn(ItemView.prototype, "onShow").andCallThrough();
+      spyOn(ItemView.prototype, "onDomRefresh").andCallThrough();
 
       m1 = new Backbone.Model();
       m2 = new Backbone.Model();
@@ -724,6 +738,10 @@ describe("collection view", function(){
 
     it("should call the child's 'onShow' method with itself as the context", function(){
       expect(viewOnShowContext).toBe(view);
+    });
+
+    it("should call the child's 'onDomRefresh' method with itself as the context", function(){
+      expect(ItemView.prototype.onDomRefresh).toHaveBeenCalled();
     });
   });
 

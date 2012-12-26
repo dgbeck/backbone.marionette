@@ -1,20 +1,24 @@
-Backbone.Marionette = Marionette = (function(Backbone, _, $){
+var Marionette = (function(Backbone, _, $){
+  "use strict";
+
   var Marionette = {};
+  Backbone.Marionette = Marionette;
 
 //= ../marionette.helpers.js
 //= ../marionette.createObject.js
 //= ../marionette.triggerMethod.js
+//= ../marionette.domRefresh.js
 
 //= ../marionette.eventbinder.js
 //= ../marionette.eventaggregator.js
 //= ../marionette.bindEntityEvents.js
   
 //= ../marionette.callbacks.js
-//= ../marionette.templatecache.js
-//= ../marionette.renderer.js
-
 //= ../marionette.controller.js
 //= ../marionette.region.js
+
+//= ../marionette.templatecache.js
+//= ../marionette.renderer.js
 
 //= ../marionette.view.js
 //= ../marionette.itemview.js

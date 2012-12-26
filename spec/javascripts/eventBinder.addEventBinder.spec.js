@@ -1,16 +1,19 @@
-describe("event binder", function(){
-  describe("given an event binder has been added to an object", function(){
+describe("add event binder", function(){
+  describe("given an event binder has been added to a plain js object", function(){
+    var model, obj;
+
+    beforeEach(function(){
+      model = new Backbone.Model();
+
+      obj = {};
+      Marionette.addEventBinder(obj);
+    });
 
     describe("when binding an event with no context specified, then triggering that event", function(){
-      var obj, context;
+      var context, binding;
 
       beforeEach(function(){
-        var model = new Backbone.Model();
-
-        obj = {};
-        Marionette.addEventBinder(obj);
-
-        obj.bindTo(model, "foo", function(){
+        obj.listenTo(model, "foo", function(){
           context = this;
         });
 
@@ -24,16 +27,12 @@ describe("event binder", function(){
     });
 
     describe("when binding an event with a context specified, then triggering that event", function(){
-      var obj, ctx, context;
+      var ctx, context;
 
       beforeEach(function(){
-        var model = new Backbone.Model();
-
-        obj = {};
         ctx = {};
-        Marionette.addEventBinder(obj);
 
-        obj.bindTo(model, "foo", function(){
+        obj.listenTo(model, "foo", function(){
           context = this;
         }, ctx);
 

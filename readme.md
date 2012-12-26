@@ -45,19 +45,17 @@ to engage in an all-or-nothing migration to begin using Marionette.
 * Compose your application's visuals at runtime, with `Region` and `Layout`
 * Nested views and layouts within visual regions
 * Built-in memory management and zombie killing in views, regions and layouts
-* Built-in event clean up with the `EventBinder`
 * Event-driven architecture with the `EventAggregator`
 * Flexible, "as-needed" architecture allowing you to pick and choose what you need
 * And much, much more
 
 ## Compatibility And Requirements
 
-Backbone.Marionette currently works with the following libraries:
+MarionetteJS currently works with the following libraries:
 
 * [jQuery](http://jquery.com) v1.8.2
-* [Underscore](http://underscorejs.org) v1.4.2
-* [Backbone](http://backbonejs.org) v0.9.2
-* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder)
+* [Underscore](http://underscorejs.org) v1.4.3
+* [Backbone](http://backbonejs.org) v0.9.9
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) 
 * [Backbone.BabySitter](https://github.com/marionettejs/backbone.babysitter)
 
@@ -74,20 +72,18 @@ Zepto users can use @Mumakil's [Standalone-Deferred](https://github.com/Mumakil/
 or @sudhirj's [simply-deferred](https://github.com/sudhirj/simply-deferred).
 Enderjs users, please let us know of how you solve any compatibility issues.
 
+Marionette no longer relies on [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
+Backbone.Events, as of v0.9.9, supercedes this library with it's
+`listenTo` and `stopListening` methods.
+
 ## Source Code And Downloads
 
 You can download the latest builds directly from the "lib" folder above.  
 For more information about the files in this folder, or to obtain an archive
 containing all Marionette dependencies (including Underscore, Backbone, etc),
-please see [the downloads section on the website](http://marionettejs.com#downloads).
+please see [the downloads section on the website](http://marionettejs.com#download).
 
-#### [http://marionettejs.com#downloads](http://marionettejs.com#downloads)
-
-### Marionette.Async Add-on
-
-Marionette.Async has officially been removed from the core Marionette
-repository. See the [Marionette.Async repository](https://github.com/marionettejs/backbone.marionette.async)
-for downloads, documentation, and more information.
+#### [http://marionettejs.com#download](http://marionettejs.com#download)
 
 ### Available Packages
 
@@ -103,7 +99,7 @@ and are not part of the core Backbone.Marionette code.
 The primary documentation is split up in to multiple files, due to the size
 of the over-all documentation. You can find these files in the 
 [/docs](https://github.com/marionettejs/backbone.marionette/tree/master/docs) folder, or use the links below to get straight to the
-documentation for each peice of Marionette.
+documentation for each piece of Marionette.
 
 ### Marionette's Pieces
 
@@ -129,10 +125,13 @@ These are the strings that you can pull to make your puppet dance:
 
 The following have been extracted in to separate plugins:
 
-* [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): An event binding manager, to facilitate binding and unbinding of events
 * [**Backbone.Wreqr.EventAggregator**](https://github.com/marionettejs/backbone.wreqr): An event aggregator, to facilitate pub/sub and event architecture. Part of a suite of messaging based patterns
 * [**Backbone.Wreqr.Commands**](https://github.com/marionettejs/backbone.wreqr): A simple command execution system
 * [**Backbone.Wreqr.RequestResponse**](https://github.com/marionettejs/backbone.wreqr): A simple request/response system
+
+The following have been deprecated w/ Backbone v0.9.9+
+
+* [**Backbone.EventBinder**](https://github.com/marionettejs/backbone.eventbinder): An event binding manager for Backbone v0.9.2, to facilitate binding and unbinding of events
 
 Please note that this is documentation is rather dry - it's meant to be a reference for
 those that just need a reference. If you're looking for an introduction and/or 

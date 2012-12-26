@@ -9,22 +9,20 @@ module.exports = function(grunt) {
     pkg: '<json:package.json>',
     meta: {
       version: '<%= pkg.version %>',
-      core_banner: '/*!\n' +
-              ' * Backbone.Marionette, v<%= meta.version %>\n' +
-              ' * Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
-              ' * Distributed under MIT license\n' +
-              ' * http://github.com/marionettejs/backbone.marionette\n' +
-              '*/',
+      core_banner: 
+              ' // Backbone.Marionette, v<%= meta.version %>\n' +
+              ' // Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
+              ' // Distributed under MIT license\n' +
+              ' // http://github.com/marionettejs/backbone.marionette\n',
       banner :
-        '<%= meta.core_banner %>\n' +
+        '<%= meta.core_banner %>\n\n' +
         '/*!\n' +
         ' * Includes BabySitter\n' +
         ' * https://github.com/marionettejs/backbone.babysitter/\n' +
+        ' *\n' + 
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
-        ' * Includes EventBinder\n' +
-        ' * https://github.com/marionettejs/backbone.eventbinder/\n' +
-        ' */'
+        ' */\n\n'
     },
 
     lint: {
@@ -80,7 +78,6 @@ module.exports = function(grunt) {
         'public/javascripts/backbone.js',
         'public/javascripts/backbone.babysitter.js',
         'public/javascripts/backbone.augment.js',
-        'public/javascripts/backbone.eventbinder.js',
         'public/javascripts/backbone.wreqr.js',
         'src/build/marionette.core.js',
         'spec/javascripts/support/marionette.support.js',
@@ -91,6 +88,7 @@ module.exports = function(grunt) {
         'src/marionette.bindEntityEvents.js',
         'src/marionette.eventaggregator.js',
         'src/marionette.controller.js',
+        'src/marionette.domRefresh.js',
         'src/marionette.view.js',
         'src/marionette.itemview.js',
         'src/marionette.collectionview.js',
